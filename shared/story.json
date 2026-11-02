@@ -1,0 +1,241 @@
+{
+  "title": "The Last Ember of Aldoria",
+  "goal": "Carry the Emberstone across the realm and relight the Founder's Flame at the Altar of Aldoria before the Ashen Eclipse.",
+  "intro": "The Founder's Flame has gone out, and an unnatural winter creeps south from the Frostbound Pass. You are the last party entrusted with the Emberstone, the one living spark of the old fire. Three nights remain before the Ashen Eclipse. Your Warden decides every step, but only your advisors can see what lies ahead, and each of them sees only a piece. Talk, compare, and trust wisely.",
+  "chapters": ["The Road Out", "The Thornwood", "The Frostbound Pass", "The Altar"],
+  "start": "d1",
+  "nodes": {
+    "d1": {
+      "id": "d1", "title": "The Gate of Hollowmere", "chapter": 0, "band": "c1",
+      "scene": "Dawn finds you at the gate of Hollowmere, the Emberstone warm and trembling in the Warden's pack. Two roads lead east, but only one will bring you to the Altar before the Ashen Eclipse. A stooped elder waits by the gate, watching you with tired eyes.",
+      "options": [
+        { "id": "a", "label": "Ask the elder for a guide and her old map", "type": "strong", "to": "d2", "aftermath": "The elder presses a brittle map into your hands and sends her grandson to lead you." },
+        { "id": "b", "label": "Hire the ferryman to carry you downriver", "type": "mixed", "to": "d2", "aftermath": "The ferryman grins, pockets your coin, and drops you at a muddy landing half a day off your road." },
+        { "id": "c", "label": "Ride hard down the open King's Road", "type": "weak", "to": "d2", "aftermath": "The King's Road is fast, and loud. Hoofbeats follow you at a distance all morning." }
+      ],
+      "hints": {
+        "seer": ["In the smoke of the gate-fire you glimpse a lone rider, small beneath a long shadow. The shadow does not belong to the rider.", "The fire leans toward the elder and away from the road. Something on the road is hungry for a traveller who goes alone."],
+        "scout": ["The King's Road is churned by many hooves, fresh since dawn. The path beside the river is untrodden.", "Dozens of riders have passed along the King's Road today, none of them gentle. The river path is quiet and unmarked."],
+        "scholar": ["The elder's map predates the great flood. It marks a crossing that no royal chart shows.", "Hollowmere's old maps remember what the king's cartographers forgot, including a way over the River Mere."],
+        "empath": ["The elder is frightened for her village, yet sincere. The ferryman's warmth is the warmth of a man counting coins.", "The elder wants you to succeed more than she wants to be thanked. The ferryman wants only your purse."]
+      }
+    },
+    "d2": {
+      "id": "d2", "title": "The Flooded Ford", "chapter": 0, "band": "c1",
+      "scene": "Spring melt has swollen the River Mere into a brown torrent. The far bank is a bowshot away, and the Eclipse will not wait for the water to fall. Upstream the river bends, and a few pale stones break the surface in a row.",
+      "options": [
+        { "id": "a", "label": "Swim the horses through the main current", "type": "weak", "to": "d3", "aftermath": "The current drags at everything. A pack is lost to the river, and you reach the far bank soaked and shaking." },
+        { "id": "b", "label": "Cross at the three standing stones", "type": "strong", "to": "d3", "aftermath": "The stones hold firm under the horses' hooves. You reach the far bank with dry saddlebags." },
+        { "id": "c", "label": "Wait until dusk for the river to fall", "type": "mixed", "to": "d3", "aftermath": "The water drops by dusk, but half a day is gone and the night is cold." }
+      ],
+      "hints": {
+        "seer": ["A silver fish leaps against the current and lands, twice, in the very same shallow place."],
+        "scout": ["The main channel runs fast and deep. Further along, a line of pale stones breaks the surface in a neat row."],
+        "scholar": ["Old songs of Hollowmere speak of three sentinels that guard the crossing of the Mere."],
+        "empath": ["Your horses stand calm when they face the standing stones and flinch when they face the open water."]
+      }
+    },
+    "d3": {
+      "id": "d3", "title": "The Gravel Inn", "chapter": 0, "band": "c1",
+      "scene": "Night falls at the Gravel Inn, a squat building older than the road it stands on. The innkeeper offers rooms and a hot meal, but he keeps glancing at the cellar door.",
+      "options": [
+        { "id": "a", "label": "Take separate rooms and bar the doors", "type": "mixed", "to": "@ch1", "aftermath": "The doors hold, but something scratches at three of them before dawn and nobody sleeps." },
+        { "id": "b", "label": "Camp outside the walls", "type": "weak", "to": "@ch1", "aftermath": "Wolves circle your fire and a strange cold keeps you awake. You leave before light, worn thin." },
+        { "id": "c", "label": "Share the common room and keep watch in shifts", "type": "strong", "to": "@ch1", "aftermath": "The hearth burns steady all night. Something walks the cellar, but it never climbs the stairs." }
+      ],
+      "hints": {
+        "seer": ["A lone candle gutters in every room, but the hearth fire of the common room burns steady and tall."],
+        "scout": ["Wolf sign circles the yard, fresh. The stable roof is sound and the walls are thick."],
+        "scholar": ["Inns on this road were raised over barrow-graves. The dead are said to walk only for those who sleep alone."],
+        "empath": ["The innkeeper fears his cellar, not strangers. He wants company in the house tonight."]
+      }
+    },
+    "m4": {
+      "id": "m4", "title": "The Thornwood Gate", "chapter": 1, "band": "d45",
+      "scene": "The Thornwood closes around the road like a fist. A hedge-witch steps from the brambles and offers to carry the Emberstone through the wood in exchange for one small favour. Behind her a narrow smugglers' trail winds away into the dark, while the old forest track runs straight on.",
+      "options": [
+        { "id": "a", "label": "Slip away down the smugglers' trail", "type": "detour", "to": "dr_b", "aftermath": "You leave the witch's cackle behind and follow muddy boot-prints south." },
+        { "id": "b", "label": "Accept the hedge-witch's offer to carry the Emberstone", "type": "doom", "to": "end_alt2", "aftermath": "" },
+        { "id": "c", "label": "Refuse the witch and hold to the old forest track", "type": "true", "to": "m5", "aftermath": "The witch spits a curse that fizzles on the iron at your belts. The brambles part grudgingly, and the track holds." }
+      ],
+      "hints": {
+        "seer": ["A crown of ash hangs above the witch's head, though she wears no crown at all."],
+        "scout": ["The smugglers' trail is well trodden by recent boots, but it bends steadily south, away from the Altar."],
+        "scholar": ["The witches of the Thornwood never ask for a small favour. Their favours are always a name, a crown, or a flame."],
+        "empath": ["Everything the witch says is true, and what she leaves unsaid is worse. The forest itself feels watchful, not hostile."]
+      }
+    },
+    "m5": {
+      "id": "m5", "title": "The Wardstone Bridge", "chapter": 1, "band": "d45",
+      "scene": "Deep in the Thornwood, an ancient stone bridge spans a gorge. A black-cloaked toll-keeper blocks the way and holds out a pale hand for payment. Beside the bridge a goat track climbs the cliff, and a rune glows faintly on the bridge's keystone.",
+      "options": [
+        { "id": "a", "label": "Let the toll-keeper hold the Emberstone as payment", "type": "doom", "to": "end_alt2", "aftermath": "" },
+        { "id": "b", "label": "Climb the goat track around the bridge", "type": "detour", "to": "dr_c", "aftermath": "The goat track is steep and cruel, but the toll-keeper's hiss fades behind you." },
+        { "id": "c", "label": "Cross the stone bridge and speak the founders' words", "type": "true", "to": "m6", "aftermath": "The old words roll out of you, the keystone blazes, and the toll-keeper's cloak sags empty onto the stones. The bridge is yours." }
+      ],
+      "hints": {
+        "seer": ["The toll-keeper's cloak holds no body. His hands are the colour of cold ash."],
+        "scout": ["The goat track climbs to a ledge nobody has walked in years, and it leads away from the pass."],
+        "scholar": ["The Wardstone Bridge bears a blessing: its guardian must yield to anyone who speaks the founders' words, 'Aldoria endures'."],
+        "empath": ["The toll-keeper wants the Emberstone more than anything, and it is the one thing he cannot take by force."]
+      }
+    },
+    "dr_a": {
+      "id": "dr_a", "title": "Lost in the Mirewood", "chapter": 1, "band": "drift",
+      "scene": "A grey mist swallows the road and every landmark. Your tired party has wandered to the edge of the Mirewood. Pale lights bob between the trees, the reeds grow thick to the east, and somewhere far off a bell tolls slowly.",
+      "options": [
+        { "id": "a", "label": "Follow the bobbing lights between the trees", "type": "wrong", "to": "end_alt3", "aftermath": "" },
+        { "id": "b", "label": "Cut straight east through the reeds", "type": "wrong", "to": "end_alt3", "aftermath": "" },
+        { "id": "c", "label": "Follow the tolling bell", "type": "right", "to": "m5", "aftermath": "The bell leads you to a hermit's chapel and from there back to the road, a day behind but whole." }
+      ],
+      "hints": {
+        "seer": ["The lights ahead are cold and green. The bell's sound is warm and amber."],
+        "scout": ["The eastern bog is treacherous, and the lights drift in the same loop again and again, like a lure on a line."],
+        "scholar": ["Will-o'-the-wisps lead travellers into pools. Chapel bells were hung in the Mirewood to guide pilgrims home."],
+        "empath": ["Something in the lights is hungry, patient and pleased. The bell feels like a sorrow that wants you safe."]
+      }
+    },
+    "dr_b": {
+      "id": "dr_b", "title": "The Smugglers' Cellar", "chapter": 1, "band": "drift",
+      "scene": "The smugglers' trail ends at a hidden cellar beneath a ruined mill. A scarred captain offers passage through the old tunnels for a price, while eight of her crew watch your packs with great interest.",
+      "options": [
+        { "id": "a", "label": "Show the Emberstone to prove your worth", "type": "wrong", "to": "end_alt3", "aftermath": "" },
+        { "id": "b", "label": "Pay the captain in coin and keep the Emberstone hidden", "type": "right", "to": "m6", "aftermath": "The captain bites the coin, grins, and guides you through the tunnels. You surface at the edge of the Thornwood." },
+        { "id": "c", "label": "Refuse and fight your way through her crew", "type": "wrong", "to": "end_alt3", "aftermath": "" }
+      ],
+      "hints": {
+        "seer": ["Every smuggler's eye in the cellar is fixed on one thing: any glow that might spill from your packs."],
+        "scout": ["Eight armed smugglers, three of them on the stairs. You cannot win a fight in this cellar."],
+        "scholar": ["Smuggler codes forbid cheating anyone who pays the toll. Coin buys their word, but glitter buys their knives."],
+        "empath": ["The captain is weary of the war and wants the winter ended. She is not your enemy unless you give her cause."]
+      }
+    },
+    "dr_c": {
+      "id": "dr_c", "title": "The Hermit's Ledge", "chapter": 1, "band": "drift",
+      "scene": "The goat track ends at a narrow ledge before a hermit's cave. Storm clouds boil over the pass, and a long slope of loose scree hangs between you and the road beyond. The hermit leans on a staff in the cave mouth and watches the sky.",
+      "options": [
+        { "id": "a", "label": "Cross the scree slope before the storm arrives", "type": "wrong", "to": "end_alt3", "aftermath": "" },
+        { "id": "b", "label": "Climb back down the cliff and rejoin the road", "type": "wrong", "to": "end_alt3", "aftermath": "" },
+        { "id": "c", "label": "Shelter in the hermit's cave until the storm breaks", "type": "right", "to": "m7", "aftermath": "The storm howls all afternoon and is gone by midnight. At dawn the hermit guides you across the cleared pass to the ice bridge." }
+      ],
+      "hints": {
+        "seer": ["Clouds boil over the pass. The storm will break before sundown and be gone by midnight."],
+        "scout": ["The scree slope is loose, and a single footfall now would bring it down. The cliff below has no holds at all."],
+        "scholar": ["The hermit is Brother Aldric, who once tended the Founder's flame and still keeps a chart of every path through the pass."],
+        "empath": ["The hermit is lonely, not dangerous. The cave feels like the safest place on the mountain."]
+      }
+    },
+    "m6": {
+      "id": "m6", "title": "The Greycloak Camp", "chapter": 1, "band": "d68",
+      "scene": "A river of fog marks the edge of the Thornwood. Beyond it lies the Frostbound Pass, and between you and the pass a company of royal Greycloaks has made camp, sworn to seize any magic that crosses the border. Their captain stands at the head of the track with her spear grounded.",
+      "options": [
+        { "id": "a", "label": "Charge through the camp under cover of fog", "type": "rash", "to": "end_alt4", "aftermath": "" },
+        { "id": "b", "label": "Parley with the captain and tell her the truth", "type": "right", "to": "m7", "aftermath": "The captain listens to the end, lowers her spear, and gives you rations and a safe path to the pass." },
+        { "id": "c", "label": "Wait in the trees for the Greycloaks to move on", "type": "timid", "to": "end_alt5", "aftermath": "" }
+      ],
+      "hints": {
+        "seer": ["The captain's banner droops although the wind is strong. Her soldiers are weary, not cruel."],
+        "scout": ["Forty tired soldiers, spears low but alert. They have been camped for weeks, and there is no sign of them leaving."],
+        "scholar": ["The Greycloaks swore an oath to the Founder's line. Honesty about the Flame binds them more than gold or steel."],
+        "empath": ["The captain wants the Flame relit as badly as you do. What she fears is being tricked."]
+      }
+    },
+    "m7": {
+      "id": "m7", "title": "The Ice Bridge", "chapter": 2, "band": "d68",
+      "scene": "A bridge of ancient ice spans the gorge of the Frostbound Pass, glittering and groaning. The sun is climbing, and every hour thins the ice. A web of cracks runs across its centre.",
+      "options": [
+        { "id": "a", "label": "Wait for nightfall so the ice can thicken", "type": "timid", "to": "end_alt5", "aftermath": "" },
+        { "id": "b", "label": "Gallop across at full speed", "type": "rash", "to": "end_alt4", "aftermath": "" },
+        { "id": "c", "label": "Cross one at a time, spread well apart, now", "type": "right", "to": "m8", "aftermath": "The bridge sings and shivers, but every careful step holds. You reach the far side as the first drip falls." }
+      ],
+      "hints": {
+        "seer": ["The bridge hums low as the sun climbs, and higher after noon. It will not last the day."],
+        "scout": ["Cracks web the centre. Weight spread thinly keeps the ice whole, while speed would shatter it."],
+        "scholar": ["Ice bridges of the pass bear steady loads and break under sudden blows. All of them melt after noon."],
+        "empath": ["Your companions are strained and afraid. The ice answers to a steady, unhurried calm."]
+      }
+    },
+    "m8": {
+      "id": "m8", "title": "Redwatch Keep", "chapter": 2, "band": "d68",
+      "scene": "Frost-wraiths howl around Redwatch Keep, a half-ruined fortress that guards the road to the Altar. Its captain begs you to light a beacon on the tower to rally the realm, but the Emberstone's light would draw every wraith to you. A secret postern lies beneath the north wall.",
+      "options": [
+        { "id": "a", "label": "Shelter inside the keep and wait out the siege", "type": "timid", "to": "end_alt5", "aftermath": "" },
+        { "id": "b", "label": "Light the Emberstone on the tower to rally the keep", "type": "rash", "to": "end_alt4", "aftermath": "" },
+        { "id": "c", "label": "Slip out the postern and promise the keep a beacon from the Altar", "type": "right", "to": "m9", "aftermath": "The captain presses her signet into your hand. 'Light it,' she whispers, 'and we will answer.' You vanish into the snow." }
+      ],
+      "hints": {
+        "seer": ["Frost-wraiths drift toward any flame that burns openly. The keep's own fires are shuttered."],
+        "scout": ["The postern is unguarded. The wraiths circle the front gate and the western wall."],
+        "scholar": ["The Redwatch beacon was built to answer the Altar's flame, never to replace it. Lighting it early only wakes the dead."],
+        "empath": ["The captain's courage is thin. She needs a promise more than a miracle, and hiding inside would only shake her further."]
+      }
+    },
+    "m9": {
+      "id": "m9", "title": "The Sunken Library", "chapter": 2, "band": "d910",
+      "scene": "Beyond the keep lies the Sunken Library, half-drowned beneath meltwater. A choir of drowned scholars murmurs from the stacks. Three ways lead out: a stair of tide-stained marble, a bridge of floating books, and a spiral that descends into the flooded vault.",
+      "options": [
+        { "id": "a", "label": "Descend the spiral into the flooded vault", "type": "wrong", "to": "end_alt6", "aftermath": "" },
+        { "id": "b", "label": "Climb the tide-stained marble stair", "type": "right", "to": "m10", "aftermath": "Marble steps lead up, dry and quiet, onto the library roof under a darkening sky." },
+        { "id": "c", "label": "Cross the bridge of floating books", "type": "right", "to": "m10", "aftermath": "Pages shift under your boots, but the bridge bears you and a dry roof receives you on the far side." }
+      ],
+      "hints": {
+        "seer": ["Beneath the water something pale and patient watches the spiral. The stair and the book-bridge are quiet."],
+        "scout": ["The marble stair and the book-bridge both exit onto the library roof. The spiral drops below the waterline."],
+        "scholar": ["The drowned scholars guard the vault. Those who descend answer questions until their breath runs out."],
+        "empath": ["The choir above wants you gone, not harmed. The voices below beckon with a longing that is far too sweet."]
+      }
+    },
+    "m10": {
+      "id": "m10", "title": "The Altar of Aldoria", "chapter": 3, "band": "d910",
+      "scene": "At last the Altar rises from the snow, a ring of black stones around a cold basin. The Ashen Eclipse begins to eat the sun. The Emberstone pulses in the Warden's hands, ready. The altar stone is scarred with an old crack, and the basin is rimed with frost.",
+      "options": [
+        { "id": "a", "label": "Strike the Emberstone against the altar to spark the flame", "type": "wrong", "to": "end_alt6", "aftermath": "" },
+        { "id": "b", "label": "Set the Emberstone in the basin and speak the founders' words", "type": "right", "to": "end_true", "aftermath": "" },
+        { "id": "c", "label": "Each of you lays a hand on the basin as the Warden sets the Emberstone", "type": "right", "to": "end_true", "aftermath": "" }
+      ],
+      "hints": {
+        "seer": ["The basin remembers hands. Wherever a hand touches it, the frost recedes."],
+        "scout": ["The altar stone is cracked from an old blow. Scorch marks show that someone once struck it, long ago, and failed."],
+        "scholar": ["The Founder did not strike the flame into being. The first kindling was a gift laid down and a vow spoken."],
+        "empath": ["Your companions are all afraid and all willing. The stone hums softly wherever a vow is spoken."]
+      }
+    }
+  },
+  "endings": {
+    "end_alt1": {
+      "id": "end_alt1", "title": "The Road Ends at the Ford", "kind": "alt",
+      "text": "Weary and behind schedule, the party never finds its footing. The Emberstone dims on the road, and by the third night winter reaches the lowlands. Hollowmere is the first village to go quiet.",
+      "debrief": "Your first three choices left the party short of time and strength. The elder's map, the standing stones and the shared hearth were the strong picks."
+    },
+    "end_alt2": {
+      "id": "end_alt2", "title": "The Bargain", "kind": "alt",
+      "text": "You bartered with something that never gives, only takes. The Emberstone passes into hands that wear a crown of ash, and a flame will be kindled again one day, but for the wrong master.",
+      "debrief": "The Emberstone must never be given up as payment. The founders' words and a steady refusal were the way through."
+    },
+    "end_alt3": {
+      "id": "end_alt3", "title": "Lost on the Detour", "kind": "alt",
+      "text": "The shortcut was a snare. Days slip by in mist and mire, the Eclipse arrives without you, and the Emberstone burns down to a cold, grey pebble.",
+      "debrief": "Detours leave little room for mistakes. When the path is unclear, listen to the clue that comes from a place of safety."
+    },
+    "end_alt4": {
+      "id": "end_alt4", "title": "Acted Too Soon", "kind": "alt",
+      "text": "You rushed in with courage and no plan. The Emberstone is knocked from the Warden's hands, and its light goes out in the snow while the Eclipse races on.",
+      "debrief": "Boldness without a plan cost you the quest. The right path asked for careful, honest steps."
+    },
+    "end_alt5": {
+      "id": "end_alt5", "title": "The Long Wait", "kind": "alt",
+      "text": "You hesitated, and the hours slipped away. By the time the party agrees on a plan, the Ashen Eclipse has swallowed the sun and the pass is sealed in ice.",
+      "debrief": "Waiting felt safe, but the Eclipse does not wait. The right path asked for a steady step taken now."
+    },
+    "end_alt6": {
+      "id": "end_alt6", "title": "One Step Short", "kind": "alt",
+      "text": "So near the end, one wrong turn undid everything. The flame catches for a single bright breath, then gutters out, and the old winter closes over Aldoria.",
+      "debrief": "You were a single choice away from the Altar's fire. Reread the omens and the lore before the last steps."
+    },
+    "end_true": {
+      "id": "end_true", "title": "The Flame Rekindled", "kind": "true",
+      "text": "The Emberstone settles into the basin and the old words rise from your throats like a hymn. Gold light spills across the snow, the Eclipse recoils, and far across Aldoria beacons answer from tower to tower, Redwatch first. Winter loosens its grip. You have relit the Founder's Flame.",
+      "debrief": "You read the omens, trusted the lore and the people you met on the road, and kindled the flame as the Founder did: with a gift and a vow."
+    }
+  }
+}
