@@ -3,17 +3,38 @@ import type { ChatMsg, View } from '../../shared/team';
 import { HINT_TITLE, ROLE_ICON, ROLE_LABEL } from '../../shared/types';
 import type { HintRoleKey, Role } from '../../shared/types';
 import { IS_DEMO, createNet, type Net } from './net';
+import { FAQ, tipFor } from './faq';
+import { PRESETS } from '../../shared/presets';
 
 function getToken(): string {
   try {
-    let t = localStorage.getItem('dm-token');
+    // One id per browser, so a phone that reloads gets its seat back.
+    // For testing several players on one computer, open the page with ?seat=1, ?seat=2 ...
+    const key = 'dm-token' + (new URLSearchParams(location.search).get('seat') ?? '');
+    let t = localStorage.getItem(key);
     if (!t) {
       t = Math.random().toString(36).slice(2) + Date.now().toString(36);
-      localStorage.setItem('dm-token', t);
+      localStorage.setItem(key, t);
     }
     return IS_DEMO ? `me-${t.slice(0, 6)}` : t;
   } catch {
     return 'p-' + Math.random().toString(36).slice(2);
+  }
+}
+
+function savedCode(): string {
+  try {
+    return localStorage.getItem('dm-code') ?? '';
+  } catch {
+    return '';
+  }
+}
+function saveCode(c: string) {
+  try {
+    if (c) localStorage.setItem('dm-code', c);
+    else localStorage.removeItem('dm-code');
+  } catch {
+    /* ignore */
   }
 }
 
@@ -26,11 +47,11 @@ function savedName(): string {
 }
 
 const ROLE_BLURB: Record<Role, string> = {
-  captain: 'You choose the team\'s path. You see no hints, so listen closely to your advisors, then decide.',
-  seer: 'You alone see omens of what is coming. Share them in your own words, and weigh the others\' clues.',
-  scout: 'You alone see the terrain and the dangers ahead. Share what you find, and weigh the others\' clues.',
-  scholar: 'You alone know the lore behind each scene. Share it in your own words, and weigh the others\' clues.',
-  empath: 'You alone sense what people and places truly intend. Share it in your own words, and weigh the others\' clues.',
+  captain: "You are the CEO. You make the team's decisions. You see no clues of your own, so ask your leads to publish theirs, then decide.",
+  seer: 'You see what is coming: market, customer and regulatory signals. Publish your clue to the team, and weigh the others\' clues.',
+  scout: 'You know what the systems and test cells can really do. Publish your clue to the team, and weigh the others\' clues.',
+  scholar: 'You know the quality records, rules and past lessons. Publish your clue to the team, and weigh the others\' clues.',
+  empath: 'You know what customers and colleagues truly want and fear. Publish your clue to the team, and weigh the others\' clues.',
 };
 
 export default function App() {
@@ -41,6 +62,9 @@ export default function App() {
   const [online, setOnline] = useState(true);
   const [offset, setOffset] = useState(0);
   const [now, setNow] = useState(Date.now());
+  const [tab, setTab] = useState<'game' | 'chat'>('game');
+  const [helpOpen, setHelpOpen] = useState(false);
+  const [seen, setSeen] = useState(0);
   const netRef = useRef<Net | null>(null);
 
   useEffect(() => {
@@ -49,11 +73,14 @@ export default function App() {
   }, []);
 
   function leave() {
+    saveCode('');
     netRef.current?.close();
     netRef.current = null;
     setNet(null);
     setView(null);
     setChat([]);
+    setTab('game');
+    setSeen(0);
     setOnline(true);
   }
 
@@ -65,15 +92,17 @@ export default function App() {
       /* private mode: ignore */
     }
     netRef.current?.close();
-    const n = createNet({ name: name.trim() || 'Wanderer', code, token: getToken() });
+    const n = createNet({ name: name.trim() || 'Colleague', code, token: getToken() });
     netRef.current = n;
     n.on('state', (v: View) => {
       setView(v);
+      if (!IS_DEMO && v.code) saveCode(v.code);
       setOffset(v.serverNow - Date.now());
     });
     n.on('chat', (m: ChatMsg) => setChat((c) => [...c.slice(-199), m]));
     n.on('chatlog', (l: ChatMsg[]) => setChat(l));
     n.on('error', (e: { message: string }) => {
+      saveCode('');
       setError(e.message);
       leave();
     });
@@ -82,33 +111,96 @@ export default function App() {
     setNet(n);
   }
 
+  const unread = tab === 'chat' ? 0 : Math.max(0, chat.filter((m) => !m.system).length - seen);
+  useEffect(() => {
+    if (tab === 'chat') setSeen(chat.filter((m) => !m.system).length);
+  }, [tab, chat]);
+
   if (!net || !view) {
-    return <Welcome onConnect={connect} error={error} connecting={!!net} />;
+    return (
+      <>
+        <Welcome onConnect={connect} error={error} connecting={!!net} onHelp={() => setHelpOpen(true)} />
+        {helpOpen && <HelpSheet onClose={() => setHelpOpen(false)} tip="" />}
+      </>
+    );
   }
 
   const remaining = view.deadline ? Math.max(0, Math.ceil((view.deadline - (now + offset)) / 1000)) : 0;
 
   return (
-    <div className="app">
-      <Header view={view} online={online} onLeave={leave} />
+    <div className="app" data-tab={tab}>
+      <Header view={view} online={online} onLeave={leave} onHelp={() => setHelpOpen(true)} />
       <main className="layout">
-        <section className="stage">
+        <section className="stage" aria-label="Game">
           {view.phase === 'lobby' && <Lobby view={view} net={net} />}
           {view.phase === 'intro' && <Intro view={view} net={net} remaining={remaining} />}
           {view.phase === 'decision' && <Decision view={view} net={net} remaining={remaining} />}
           {view.phase === 'ending' && <Ending view={view} onAgain={leave} />}
         </section>
-        <ChatPanel view={view} chat={chat} net={net} />
+        <FeedPanel view={view} chat={chat} net={net} active={tab === 'chat'} />
       </main>
+      <nav className="tabbar" aria-label="Screens">
+        <button className={tab === 'game' ? 'on' : ''} aria-current={tab === 'game'} onClick={() => setTab('game')}>
+          <span aria-hidden>🎮</span> Game
+        </button>
+        <button className={tab === 'chat' ? 'on' : ''} aria-current={tab === 'chat'} onClick={() => setTab('chat')}>
+          <span aria-hidden>💬</span> Team{unread > 0 && <b className="badge-n">{unread > 9 ? '9+' : unread}</b>}
+        </button>
+      </nav>
+      {helpOpen && <HelpSheet onClose={() => setHelpOpen(false)} tip={tipFor(view.phase, view.you.isCaptain, view.you.isLeader)} />}
     </div>
   );
 }
 
-function Header({ view, online, onLeave }: { view: View; online: boolean; onLeave: () => void }) {
+function HelpSheet({ onClose, tip }: { onClose: () => void; tip: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const prev = document.activeElement as HTMLElement | null;
+    ref.current?.focus();
+    const key = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
+    window.addEventListener('keydown', key);
+    return () => {
+      window.removeEventListener('keydown', key);
+      prev?.focus?.();
+    };
+  }, [onClose]);
+  return (
+    <div className="scrim" onClick={onClose}>
+      <div className="sheet" role="dialog" aria-modal="true" aria-label="Help and FAQ" tabIndex={-1} ref={ref} onClick={(e) => e.stopPropagation()}>
+        <div className="sheet-head">
+          <h2>Help &amp; FAQ</h2>
+          <button className="ghost" onClick={onClose} aria-label="Close help">
+            Close
+          </button>
+        </div>
+        <div className="sheet-body">
+          {tip && (
+            <div className="tip">
+              <b>Right now.</b> {tip}
+            </div>
+          )}
+          {FAQ.map((g) => (
+            <section key={g.title}>
+              <h3>{g.title}</h3>
+              {g.items.map((it) => (
+                <details key={it.q} className="faq">
+                  <summary>{it.q}</summary>
+                  <p>{it.a}</p>
+                </details>
+              ))}
+            </section>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Header({ view, online, onLeave, onHelp }: { view: View; online: boolean; onLeave: () => void; onHelp: () => void }) {
   return (
     <header className="top">
       <div className="brand">
-        <span className="flame" aria-hidden>🔥</span>
+        <span className="flame" aria-hidden>🌉</span>
         <div>
           <strong>{view.title}</strong>
           <small>{IS_DEMO ? 'Practice team (runs in your browser)' : `Team ${view.code}`}</small>
@@ -121,6 +213,9 @@ function Header({ view, online, onLeave }: { view: View; online: boolean; onLeav
             Decision {view.slot} of {view.total}
           </span>
         )}
+        <button className="ghost help-btn" onClick={onHelp} aria-label="Help and FAQ">
+          ? <span className="lbl">Help</span>
+        </button>
         <button className="ghost" onClick={onLeave}>
           Leave
         </button>
@@ -129,41 +224,47 @@ function Header({ view, online, onLeave }: { view: View; online: boolean; onLeav
   );
 }
 
-function Welcome({ onConnect, error, connecting }: { onConnect: (n: string, c?: string) => void; error: string; connecting: boolean }) {
+function Welcome({ onConnect, error, connecting, onHelp }: { onConnect: (n: string, c?: string) => void; error: string; connecting: boolean; onHelp: () => void }) {
   const [name, setName] = useState(savedName());
   const [code, setCode] = useState('');
+  const last = IS_DEMO ? '' : savedCode();
   const ok = name.trim().length > 0;
   return (
     <div className="welcome">
       <div className="card hero">
-        <div className="flame big" aria-hidden>🔥</div>
-        <h1>The Last Ember of Aldoria</h1>
+        <div className="flame big" aria-hidden>🌉</div>
+        <h1>Project Bridgeline</h1>
         <p className="lead">
-          A team quest told in about twenty minutes. One of you is the Warden and makes every decision. The rest are advisors who each see
-          a private clue the others cannot, and must pass it on through chat.
+          A team simulation played in about twenty minutes. One of you is the CEO and makes every decision. The other four are leads
+          (Product, CTO, Quality, Customer) who each see a private clue the others cannot, and publish it to the team.
         </p>
         <label className="field">
           <span>Your name</span>
-          <input value={name} maxLength={20} placeholder="e.g. Brenna" onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && ok && onConnect(name)} autoFocus />
+          <input value={name} maxLength={20} placeholder="e.g. Priya" onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && ok && onConnect(name)} autoComplete="given-name" />
         </label>
         {IS_DEMO ? (
           <>
             <button className="primary" disabled={!ok || connecting} onClick={() => onConnect(name)}>
-              Begin the practice quest
+              Begin the practice run
             </button>
             <p className="fine">
-              You play with four practice teammates who chat and suggest options. This preview runs entirely in your browser; the real game
+              You play with four practice teammates who publish clues and recommend options. This preview runs entirely in your browser; the real game
               uses a server so human teams can play together.
             </p>
           </>
         ) : (
           <>
-            <button className="primary" disabled={!ok || connecting} onClick={() => onConnect(name)}>
+            {last && (
+              <button className="primary" disabled={!ok || connecting} onClick={() => onConnect(name, last)}>
+                Rejoin team {last}
+              </button>
+            )}
+            <button className={last ? '' : 'primary'} style={last ? { width: '100%', marginTop: 10 } : undefined} disabled={!ok || connecting} onClick={() => onConnect(name)}>
               Create a new team
             </button>
             <div className="or">or join one</div>
             <div className="row">
-              <input className="code" value={code} maxLength={4} placeholder="CODE" onChange={(e) => setCode(e.target.value.toUpperCase())} />
+              <input className="code" value={code} maxLength={4} placeholder="CODE" autoCapitalize="characters" autoCorrect="off" spellCheck={false} onChange={(e) => setCode(e.target.value.toUpperCase())} />
               <button disabled={!ok || code.length < 4 || connecting} onClick={() => onConnect(name, code)}>
                 Join team
               </button>
@@ -171,21 +272,25 @@ function Welcome({ onConnect, error, connecting }: { onConnect: (n: string, c?: 
           </>
         )}
         {error && <p className="error" role="alert">{error}</p>}
+        <button className="ghost helplink" onClick={onHelp}>
+          New here? Read the FAQ
+        </button>
       </div>
     </div>
   );
 }
 
 function Lobby({ view, net }: { view: View; net: Net }) {
-  const [pref, setPref] = useState<'random' | 'captain' | 'advisor'>('random');
+  const [pref, setPref] = useState<'random' | 'captain' | 'lead'>('random');
   const hasBots = view.members.some((m) => m.bot);
   return (
     <div className="card">
-      <h2>Gather your party</h2>
+      <h2>Assemble your team</h2>
       {!IS_DEMO && (
         <div className="codebox">
           <span>Share this code with your teammates</span>
           <b>{view.code}</b>
+          <ShareCode code={view.code} />
         </div>
       )}
       <ul className="members">
@@ -214,22 +319,45 @@ function Lobby({ view, net }: { view: View; net: Net }) {
           {hasBots && (
             <div className="seg" role="radiogroup" aria-label="Your role">
               <span>Your role:</span>
-              {(['random', 'captain', 'advisor'] as const).map((k) => (
+              {(['random', 'captain', 'lead'] as const).map((k) => (
                 <button key={k} role="radio" aria-checked={pref === k} className={pref === k ? 'on' : ''} onClick={() => setPref(k)}>
-                  {k === 'random' ? 'Random' : k === 'captain' ? 'Warden' : 'Advisor'}
+                  {k === 'random' ? 'Random' : k === 'captain' ? 'CEO' : 'Lead'}
                 </button>
               ))}
             </div>
           )}
           <button className="primary" onClick={() => net.emit('start', pref === 'random' ? {} : { captain: pref === 'captain' })}>
-            Set out ({view.members.length} {view.members.length === 1 ? 'player' : 'players'})
+            Start the programme ({view.members.length} {view.members.length === 1 ? 'player' : 'players'})
           </button>
-          <p className="fine">Roles are drawn at random. With fewer than five players, the missing roles' clues are shared among the advisors.</p>
+          <p className="fine">Roles are drawn at random. With fewer than five players, the missing roles' clues are shared among the leads.</p>
         </>
       ) : (
-        <p className="waiting">Waiting for the team leader to set out…</p>
+        <p className="waiting">Waiting for the team leader to start…</p>
       )}
     </div>
+  );
+}
+
+function ShareCode({ code }: { code: string }) {
+  const [done, setDone] = useState(false);
+  const text = `Join my Project Bridgeline team. Open ${location.origin}${location.pathname} and enter the code ${code}`;
+  async function share() {
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'Project Bridgeline', text });
+        return;
+      }
+      await navigator.clipboard.writeText(text);
+      setDone(true);
+      setTimeout(() => setDone(false), 2000);
+    } catch {
+      /* cancelled or blocked: ignore */
+    }
+  }
+  return (
+    <button className="ghost sharebtn" onClick={share}>
+      {done ? 'Copied' : 'Share invite'}
+    </button>
   );
 }
 
@@ -267,7 +395,7 @@ function Intro({ view, net, remaining }: { view: View; net: Net; remaining: numb
       <Timer remaining={remaining} total={view.phaseSeconds} />
       {canSkip && (
         <button className="primary" onClick={() => net.emit('skip')}>
-          Begin the journey
+          Begin the programme
         </button>
       )}
     </div>
@@ -297,16 +425,19 @@ function Decision({ view, net, remaining }: { view: View; net: Net; remaining: n
             <div key={h.from} className={`hint ${h.from}`}>
               <span className="hlabel">
                 <span aria-hidden>{ROLE_ICON[h.from as HintRoleKey]}</span> {HINT_TITLE[h.from as HintRoleKey]}
-                <em>only you can see this</em>
+                <em>only you can see this until you publish it</em>
               </span>
               <p>{h.text}</p>
+              <button className="ghost pub" disabled={h.published} onClick={() => net.emit('publish', { role: h.from })}>
+                {h.published ? 'Published to your team ✓' : 'Publish to team'}
+              </button>
             </div>
           ))}
         </div>
       )}
-      {captain && view.hints.length === 0 && <p className="fine">You are the Warden: ask your advisors what they have seen, then choose.</p>}
+      {captain && view.hints.length === 0 && <p className="fine">You are the CEO: ask your leads to publish their clues, then decide.</p>}
 
-      <h3>{captain ? 'Choose your path' : 'Suggest a path to the Warden'}</h3>
+      <h3>{captain ? 'Choose your next move' : 'Recommend a move to the CEO'}</h3>
       <ul className="options">
         {node.options.map((o) => {
           const selected = captain ? pending === o.id : o.mine;
@@ -325,11 +456,13 @@ function Decision({ view, net, remaining }: { view: View; net: Net; remaining: n
         })}
       </ul>
       {captain ? (
-        <button className="primary" disabled={!pending} onClick={() => net.emit('choose', { optionId: pending })}>
-          Lead the party this way
-        </button>
+        <div className="actionbar">
+          <button className="primary" disabled={!pending} onClick={() => net.emit('choose', { optionId: pending })}>
+            Commit the team to this move
+          </button>
+        </div>
       ) : (
-        <p className="fine">The Warden decides. If time runs out, the most-suggested path is taken.</p>
+        <p className="fine">The CEO decides. If time runs out, the most-suggested option is taken.</p>
       )}
     </div>
   );
@@ -349,28 +482,31 @@ function Ending({ view, onAgain }: { view: View; onAgain: () => void }) {
         <div className="fine">Final choice: "{e.lastChoice}" · {e.decisions} decisions made</div>
       </div>
       <button className="primary" onClick={onAgain}>
-        {IS_DEMO ? 'Play again' : 'Leave the party'}
+        {IS_DEMO ? 'Play again' : 'Leave the team'}
       </button>
     </div>
   );
 }
 
-function ChatPanel({ view, chat, net }: { view: View; chat: ChatMsg[]; net: Net }) {
-  const [text, setText] = useState('');
+function FeedPanel({ view, chat, net, active }: { view: View; chat: ChatMsg[]; net: Net; active: boolean }) {
   const box = useRef<HTMLDivElement>(null);
+  const [cool, setCool] = useState(false);
   useEffect(() => {
     box.current?.scrollTo({ top: box.current.scrollHeight });
-  }, [chat.length]);
-  function send() {
-    const t = text.trim();
-    if (!t) return;
-    net.emit('chat', { text: t });
-    setText('');
+  }, [chat.length, active]);
+  const lobby = view.phase === 'lobby';
+  const shown = PRESETS.filter((p) => (lobby ? true : p.group === 'talk'));
+  function say(id: string) {
+    if (cool) return;
+    net.emit('say', { id });
+    setCool(true);
+    setTimeout(() => setCool(false), 900);
   }
+  const time = (ts: number) => new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   return (
-    <aside className="chat" aria-label="Team chat">
+    <aside className="chat" aria-label="Team feed" data-active={active}>
       <div className="chat-head">
-        <b>Party chat</b>
+        <b>Team feed</b>
         <div className="roster">
           {view.members.map((m) => (
             <span key={m.id} className={`chip ${m.connected ? '' : 'off'}`} title={m.role ? ROLE_LABEL[m.role] : ''}>
@@ -380,32 +516,42 @@ function ChatPanel({ view, chat, net }: { view: View; chat: ChatMsg[]; net: Net 
         </div>
       </div>
       <div className="log" ref={box} aria-live="polite">
+        {chat.length === 0 && <div className="msg sys">Nothing yet. Tap a message below to tell your team something.</div>}
         {chat.map((m) =>
           m.system ? (
             <div key={m.id} className="msg sys">{m.text}</div>
+          ) : m.kind === 'clue' ? (
+            <div key={m.id} className="msg clue">
+              <span className="who">
+                {m.role ? ROLE_ICON[m.role] + ' ' : ''}
+                {m.name} published a clue · {time(m.ts)}
+              </span>
+              <span className="body">
+                {m.role && <b>{HINT_TITLE[m.role as HintRoleKey]}</b>}
+                {m.text}
+              </span>
+            </div>
           ) : (
             <div key={m.id} className={`msg ${m.from === view.you.id ? 'mine' : ''}`}>
               <span className="who">
                 {m.role ? ROLE_ICON[m.role] + ' ' : ''}
-                {m.name}
+                {m.name} · {time(m.ts)}
               </span>
               <span className="body">{m.text}</span>
             </div>
           ),
         )}
       </div>
-      <form
-        className="composer"
-        onSubmit={(e) => {
-          e.preventDefault();
-          send();
-        }}
-      >
-        <input value={text} maxLength={200} placeholder="Share what you know…" onChange={(e) => setText(e.target.value)} />
-        <button className="primary" type="submit" disabled={!text.trim()}>
-          Send
-        </button>
-      </form>
+      <div className="presets" role="group" aria-label="Quick messages">
+        {lobby && <p className="fine">Agree when to meet, then the leader taps Start. These are the only messages in the game.</p>}
+        <div className="pgrid">
+          {shown.map((p) => (
+            <button key={p.id} disabled={cool} onClick={() => say(p.id)}>
+              {p.label}
+            </button>
+          ))}
+        </div>
+      </div>
     </aside>
   );
 }

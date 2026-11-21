@@ -4,26 +4,26 @@ export type Role = 'captain' | HintRoleKey;
 export const HINT_ROLES: HintRoleKey[] = ['seer', 'scout', 'scholar', 'empath'];
 
 export const ROLE_LABEL: Record<Role, string> = {
-  captain: 'Warden',
-  seer: 'Seer',
-  scout: 'Scout',
-  scholar: 'Loremaster',
-  empath: 'Heartspeaker',
+  captain: 'CEO',
+  seer: 'Product Lead',
+  scout: 'CTO',
+  scholar: 'Quality Lead',
+  empath: 'Customer Lead',
 };
 
 export const ROLE_ICON: Record<Role, string> = {
-  captain: '⚔️',
-  seer: '🔮',
-  scout: '🧭',
-  scholar: '📜',
-  empath: '💗',
+  captain: '👔',
+  seer: '🧭',
+  scout: '💻',
+  scholar: '📋',
+  empath: '🤝',
 };
 
 export const HINT_TITLE: Record<HintRoleKey, string> = {
-  seer: "The Seer's omen",
-  scout: "The Scout's report",
-  scholar: "The Loremaster's lore",
-  empath: "The Heartspeaker's sense",
+  seer: "The Product Lead’s outlook",
+  scout: "The CTO’s technical read",
+  scholar: "The Quality Lead’s record",
+  empath: "The Customer Lead’s feedback",
 };
 
 /**

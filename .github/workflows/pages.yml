@@ -27,6 +27,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint:story
       - run: npm run sim
+      - run: npm run test:feed
       - run: npm run build:demo
       - uses: actions/upload-pages-artifact@v3
         with:

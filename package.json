@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "The Last Ember of Aldoria - team chat RPG prototype (pre-generated story, no live LLM)",
+  "description": "Project Bridgeline - phone-first team decision-game prototype (pre-generated story, no live LLM)",
   "scripts": {
     "start": "tsx server/index.ts",
     "dev:server": "tsx watch server/index.ts",
@@ -12,6 +12,7 @@
     "build:demo": "vite build --mode demo",
     "lint:story": "tsx server/lint-story.ts",
     "sim": "tsx server/sim.ts",
+    "test:feed": "tsx server/test-feed.ts",
     "typecheck": "tsc --noEmit",
     "loadtest": "tsx server/loadtest.ts",
     "demo:docs": "vite build --mode demo && node -e \"require('fs').copyFileSync('dist-demo/index.html','docs/index.html')\""

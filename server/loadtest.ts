@@ -19,7 +19,7 @@ let sent = 0;
 let received = 0;
 let disconnects = 0;
 let connected = 0;
-const sentAt = new Map<string, number>();
+const sentAt = new Map<string, number[]>(); // per player: send times of presets still waiting for their echo
 
 function client(team: number, idx: number, getCode: () => string | undefined, setCode: (c: string) => void): Promise<Socket> {
   return new Promise((resolve) => {
@@ -34,14 +34,12 @@ function client(team: number, idx: number, getCode: () => string | undefined, se
       connected++;
       resolve(s);
     });
-    s.on('chat', (m: { text: string; from: string }) => {
+    s.on('chat', (m: { from: string; kind?: string }) => {
       received++;
-      if (m.from === token) {
-        const t = sentAt.get(m.text);
-        if (t) {
-          delays.push(Date.now() - t);
-          sentAt.delete(m.text);
-        }
+      if (m.from === token && m.kind === 'preset') {
+        const q = sentAt.get(token);
+        const t = q?.shift();
+        if (t) delays.push(Date.now() - t);
       }
     });
     s.on('state', (v: any) => {
@@ -57,7 +55,7 @@ function client(team: number, idx: number, getCode: () => string | undefined, se
 }
 
 async function main() {
-  console.log(`Target ${TARGET}: ${TEAMS} teams x 5 players = ${TEAMS * 5} sockets, chat every ${CHAT_EVERY_MS / 1000}s per player, ${SECONDS}s`);
+  console.log(`Target ${TARGET}: ${TEAMS} teams x 5 players = ${TEAMS * 5} sockets, preset message every ${CHAT_EVERY_MS / 1000}s per player, ${SECONDS}s`);
   const all: Socket[] = [];
   const leaders: Socket[] = [];
   const t0 = Date.now();
@@ -75,10 +73,10 @@ async function main() {
 
   const timers = all.map((s, i) =>
     setInterval(() => {
-      const text = `m${i}-${Date.now()}`;
-      sentAt.set(text, Date.now());
+      const tok = `lt-${Math.floor(i / 5)}-${i % 5}`;
+      (sentAt.get(tok) ?? sentAt.set(tok, []).get(tok)!).push(Date.now());
       sent++;
-      s.emit('chat', { text });
+      s.emit('say', { id: 'now' });
     }, CHAT_EVERY_MS + (i % 7) * 100),
   );
 

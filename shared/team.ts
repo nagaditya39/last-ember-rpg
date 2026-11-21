@@ -1,4 +1,5 @@
 import { HINT_ROLES } from './types';
+import { PRESET_BY_ID } from './presets';
 import type { HintRoleKey, Role, Story, StoryNode } from './types';
 
 /**
@@ -38,6 +39,8 @@ export interface ChatMsg {
   text: string;
   ts: number;
   system?: boolean;
+  /** a preset phrase, or a clue an advisor published from their own hint */
+  kind?: 'preset' | 'clue';
 }
 
 interface HistoryItem {
@@ -46,16 +49,9 @@ interface HistoryItem {
   label: string;
 }
 
-const BOT_NAMES = ['Aldric', 'Brenna', 'Corwin', 'Dagny', 'Elowen'];
-const BOT_PREFIX: Record<HintRoleKey, string> = {
-  seer: 'I stared into the embers and saw this: ',
-  scout: 'Scouting report: ',
-  scholar: 'From the old lore: ',
-  empath: 'I can feel it: ',
-};
+const BOT_NAMES = ['Aarav', 'Meera', 'Karthik', 'Divya', 'Rohan'];
 const CHAPTER1_POINTS: Record<string, number> = { strong: 2, mixed: 1, weak: 0 };
 const BEST_TYPES = new Set(['strong', 'true', 'right']);
-const BAD_WORDS = /\b(damn|shit|fuck|bitch|asshole)\w*/gi; // tiny placeholder filter
 
 function hashStr(s: string): number {
   let h = 2166136261;
@@ -104,6 +100,7 @@ export class Team {
   lastActivity = Date.now();
 
   private chatSeq = 0;
+  private published = new Set<string>();
   private suggestions = new Map<string, string>();
   private order: string[] = [];
   private hintOwner = new Map<HintRoleKey, string>();
@@ -141,7 +138,7 @@ export class Team {
     };
     this.players.push(player);
     if (!this.leaderId) this.leaderId = id;
-    this.system(`${player.name} joined the party.`);
+    this.system(`${player.name} joined the team.`);
     return { ok: true, player };
   }
 
@@ -174,7 +171,7 @@ export class Team {
   }
 
   private uniqueName(name: string): string {
-    const base = (name || 'Wanderer').trim().slice(0, 20) || 'Wanderer';
+    const base = (name || 'Colleague').trim().slice(0, 20) || 'Colleague';
     let n = base;
     let i = 2;
     while (this.players.some((p) => p.name.toLowerCase() === n.toLowerCase())) n = `${base} ${i++}`;
@@ -188,8 +185,10 @@ export class Team {
     const me = this.players.find((p) => p.id === pid);
     if (!me) return;
     switch (ev) {
-      case 'chat':
-        return this.postChat(me, String(payload?.text ?? ''));
+      case 'say':
+        return this.say(me, String(payload?.id ?? ''));
+      case 'publish':
+        return this.publish(me, String(payload?.role ?? ''));
       case 'suggest':
         return this.suggest(me, String(payload?.optionId ?? ''));
       case 'choose':
@@ -211,13 +210,27 @@ export class Team {
 
   // ---------- chat ----------
 
-  private postChat(p: Player, raw: string) {
+  /** A preset phrase. Rate limited; meeting phrases only make sense before the game starts. */
+  private say(p: Player, id: string) {
+    const preset = PRESET_BY_ID.get(id);
+    if (!preset) return;
+    if (preset.group === 'meet' && this.phase !== 'lobby') return;
     const now = Date.now();
     if (now - p.lastChatAt < 800) return;
-    const text = raw.replace(/\s+/g, ' ').trim().slice(0, 200).replace(BAD_WORDS, (m) => '*'.repeat(m.length));
-    if (!text) return;
     p.lastChatAt = now;
-    this.pushChat({ from: p.id, name: p.name, role: p.role, text });
+    this.pushChat({ from: p.id, name: p.name, role: p.role, text: preset.text, kind: 'preset' });
+  }
+
+  /** Post the clue this player holds for the current decision into the team feed, once. */
+  private publish(p: Player, role: string) {
+    if (this.phase !== 'decision') return;
+    const r = HINT_ROLES.find((x) => x === role);
+    if (!r || this.hintOwner.get(r) !== p.id) return;
+    const key = `${this.nodeId}:${r}`;
+    if (this.published.has(key)) return;
+    this.published.add(key);
+    this.pushChat({ from: p.id, name: p.name, role: r, text: this.pickHint(this.story.nodes[this.nodeId], r), kind: 'clue' });
+    this.broadcast();
   }
 
   private system(text: string) {
@@ -251,7 +264,7 @@ export class Team {
       });
       k++;
     }
-    if (k) this.system(`${k} practice teammate${k > 1 ? 's' : ''} joined the party.`);
+    if (k) this.system(`${k} practice teammate${k > 1 ? 's' : ''} joined the team.`);
     this.broadcast();
   }
 
@@ -290,7 +303,7 @@ export class Team {
       const holder = this.players.find((p) => p.role === r && p.connected);
       if (holder) this.hintOwner.set(r, holder.id);
       else if (advisors.length) this.hintOwner.set(r, advisors[rr++ % advisors.length].id);
-      else this.hintOwner.set(r, this.captainId); // solo play: the Warden holds every hint
+      else this.hintOwner.set(r, this.captainId); // solo play: the CEO holds every hint
     }
   }
 
@@ -303,7 +316,7 @@ export class Team {
     oldCap.role = heirRole;
     this.captainId = heir.id;
     this.assignHints();
-    this.system(`${heir.name} is now the Warden.`);
+    this.system(`${heir.name} is now the CEO.`);
   }
 
   private beginJourney() {
@@ -359,8 +372,8 @@ export class Team {
     const optionId = picked ?? this.order[Math.floor(Math.random() * this.order.length)];
     this.system(
       picked
-        ? 'Time ran out. The party follows the most-suggested path.'
-        : 'Time ran out. The party stumbles onward at random.',
+        ? 'Time ran out. The team follows the most-suggested option.'
+        : 'Time ran out. The team moves on without a clear decision.',
     );
     this.choose(this.captainId, optionId, true);
   }
@@ -375,7 +388,7 @@ export class Team {
     this.botTimers.forEach(clearTimeout);
     this.botTimers = [];
     const captain = this.players.find((p) => p.id === this.captainId);
-    if (!auto) this.system(`${captain?.name ?? 'The Warden'} chose: ${opt.label}`);
+    if (!auto) this.system(`${captain?.name ?? 'The CEO'} chose: ${opt.label}`);
     this.history.push({ nodeId: node.id, optionId: opt.id, label: opt.label });
     if (node.band === 'c1') this.score += CHAPTER1_POINTS[opt.type] ?? 0;
 
@@ -387,7 +400,7 @@ export class Team {
       this.endingId = next;
       this.phase = 'ending';
       this.deadline = 0;
-      this.system(`The tale ends: ${this.story.endings[next].title}.`);
+      this.system(`The programme ends: ${this.story.endings[next].title}.`);
       this.broadcast();
       return;
     }
@@ -419,8 +432,7 @@ export class Team {
       let t = (2 + Math.random() * 6) * 1000 * f;
       for (const [r, owner] of this.hintOwner) {
         if (owner !== bot.id) continue;
-        const text = this.pickHint(node, r);
-        this.later(t, () => this.pushChat({ from: bot.id, name: bot.name, role: bot.role, text: BOT_PREFIX[r] + text }));
+        this.later(t, () => this.publish(bot, r));
         t += (3 + Math.random() * 3) * 1000 * f;
       }
       this.later((25 + Math.random() * 30) * 1000 * f, () => {
@@ -488,7 +500,7 @@ export class Team {
         }),
       },
       hints: node
-        ? HINT_ROLES.filter((r) => this.hintOwner.get(r) === pid).map((r) => ({ from: r, text: this.pickHint(node, r) }))
+        ? HINT_ROLES.filter((r) => this.hintOwner.get(r) === pid).map((r) => ({ from: r, text: this.pickHint(node, r), published: this.published.has(`${this.nodeId}:${r}`) }))
         : [],
       ending: ending && {
         title: ending.title,

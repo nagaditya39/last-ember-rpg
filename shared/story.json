@@ -1,241 +1,645 @@
 {
-  "title": "The Last Ember of Aldoria",
-  "goal": "Carry the Emberstone across the realm and relight the Founder's Flame at the Altar of Aldoria before the Ashen Eclipse.",
-  "intro": "The Founder's Flame has gone out, and an unnatural winter creeps south from the Frostbound Pass. You are the last party entrusted with the Emberstone, the one living spark of the old fire. Three nights remain before the Ashen Eclipse. Your Warden decides every step, but only your advisors can see what lies ahead, and each of them sees only a piece. Talk, compare, and trust wisely.",
-  "chapters": ["The Road Out", "The Thornwood", "The Frostbound Pass", "The Altar"],
+  "title": "Project Bridgeline",
+  "goal": "Take Bridgeline from a lab prototype to a trusted platform that every Halden India site can use, and win the Leadership Review’s approval before the quarter closes.",
+  "intro": "At Halden Aerospace India’s Bengaluru engineering centre, engineers lose hours every week chasing test data across inboxes and spreadsheets. Your small team has a prototype that could connect engineers, test cells and suppliers in one place, and the Leadership Review is six weeks away. Your CEO decides every step, but only your four leads can see what is coming, and each of them sees only part of the picture. Share what you know, compare, and trust wisely.",
+  "chapters": [
+    "The Prototype",
+    "The Scale-Up",
+    "The Trust Test",
+    "The Leadership Review"
+  ],
   "start": "d1",
   "nodes": {
     "d1": {
-      "id": "d1", "title": "The Gate of Hollowmere", "chapter": 0, "band": "c1",
-      "scene": "Dawn finds you at the gate of Hollowmere, the Emberstone warm and trembling in the Warden's pack. Two roads lead east, but only one will bring you to the Altar before the Ashen Eclipse. A stooped elder waits by the gate, watching you with tired eyes.",
+      "id": "d1",
+      "title": "The Whiteboard Idea",
+      "chapter": 0,
+      "band": "c1",
+      "scene": "Monday morning at the Bengaluru engineering centre. Three engineers are hunting for the same engine-test result across inboxes and spreadsheets, again. On the whiteboard, your team has sketched Bridgeline, a shared space where engineers, test cells and suppliers can post what they find. You have a small budget and plenty of enthusiasm. How do you begin?",
       "options": [
-        { "id": "a", "label": "Ask the elder for a guide and her old map", "type": "strong", "to": "d2", "aftermath": "The elder presses a brittle map into your hands and sends her grandson to lead you." },
-        { "id": "b", "label": "Hire the ferryman to carry you downriver", "type": "mixed", "to": "d2", "aftermath": "The ferryman grins, pockets your coin, and drops you at a muddy landing half a day off your road." },
-        { "id": "c", "label": "Ride hard down the open King's Road", "type": "weak", "to": "d2", "aftermath": "The King's Road is fast, and loud. Hoofbeats follow you at a distance all morning." }
+        {
+          "id": "a",
+          "label": "Spend a day shadowing three engineers before writing any code",
+          "type": "strong",
+          "to": "d2",
+          "aftermath": "The engineers show you their private trackers and the exact moment each day goes wrong. Your first screens almost write themselves."
+        },
+        {
+          "id": "b",
+          "label": "Build a quick demo from the data you already have",
+          "type": "mixed",
+          "to": "d2",
+          "aftermath": "The demo looks good, but the data is stale and the engineers politely list what is missing."
+        },
+        {
+          "id": "c",
+          "label": "Announce Bridgeline to the whole centre at the next all-hands",
+          "type": "weak",
+          "to": "d2",
+          "aftermath": "The announcement earns applause and a dozen new demands. Nobody is quite sure what Bridgeline actually does."
+        }
       ],
       "hints": {
-        "seer": ["In the smoke of the gate-fire you glimpse a lone rider, small beneath a long shadow. The shadow does not belong to the rider.", "The fire leans toward the elder and away from the road. Something on the road is hungry for a traveller who goes alone."],
-        "scout": ["The King's Road is churned by many hooves, fresh since dawn. The path beside the river is untrodden.", "Dozens of riders have passed along the King's Road today, none of them gentle. The river path is quiet and unmarked."],
-        "scholar": ["The elder's map predates the great flood. It marks a crossing that no royal chart shows.", "Hollowmere's old maps remember what the king's cartographers forgot, including a way over the River Mere."],
-        "empath": ["The elder is frightened for her village, yet sincere. The ferryman's warmth is the warmth of a man counting coins.", "The elder wants you to succeed more than she wants to be thanked. The ferryman wants only your purse."]
+        "seer": [
+          "Past internal tools launched with a big announcement went quiet within a month. The ones that began with a pain people already felt kept growing.",
+          "Look back at earlier tools: loud launches faded, while those rooted in a daily frustration spread by word of mouth."
+        ],
+        "scout": [
+          "The sample data is out of date, and the test-cell logs use three different formats. Two engineers already keep private trackers that work surprisingly well.",
+          "Nothing you could demo today reflects the real test logs. Meanwhile, a couple of engineers have built their own trackers that people genuinely use."
+        ],
+        "scholar": [
+          "The quality archive notes that tools designed without their daily users were usually rewritten within a year.",
+          "Lessons-learned records repeat one finding: tools built away from the people who use them need rebuilding soon after launch."
+        ],
+        "empath": [
+          "Engineers are weary of tools that are announced to them. They open up when someone asks about their day first.",
+          "People here have seen many launches. They respond to being asked, not told."
+        ]
       }
     },
     "d2": {
-      "id": "d2", "title": "The Flooded Ford", "chapter": 0, "band": "c1",
-      "scene": "Spring melt has swollen the River Mere into a brown torrent. The far bank is a bowshot away, and the Eclipse will not wait for the water to fall. Upstream the river bends, and a few pale stones break the surface in a row.",
+      "id": "d2",
+      "title": "The First Access Request",
+      "chapter": 0,
+      "band": "c1",
+      "scene": "The prototype needs live data from the engine test cells. The test operations lead is cautious. An old service account still has broad access to everything, and using it would save weeks.",
       "options": [
-        { "id": "a", "label": "Swim the horses through the main current", "type": "weak", "to": "d3", "aftermath": "The current drags at everything. A pack is lost to the river, and you reach the far bank soaked and shaking." },
-        { "id": "b", "label": "Cross at the three standing stones", "type": "strong", "to": "d3", "aftermath": "The stones hold firm under the horses' hooves. You reach the far bank with dry saddlebags." },
-        { "id": "c", "label": "Wait until dusk for the river to fall", "type": "mixed", "to": "d3", "aftermath": "The water drops by dusk, but half a day is gone and the night is cold." }
+        {
+          "id": "a",
+          "label": "Use the old service account that still has broad access",
+          "type": "weak",
+          "to": "d3",
+          "aftermath": "Data flows by evening. So does a quiet worry about who might notice."
+        },
+        {
+          "id": "b",
+          "label": "Co-write a read-only data agreement with the test operations lead",
+          "type": "strong",
+          "to": "d3",
+          "aftermath": "The lead adds two safeguards of her own, and offers you a standing slot in her weekly review."
+        },
+        {
+          "id": "c",
+          "label": "Wait for the standard IT request to run its course",
+          "type": "mixed",
+          "to": "d3",
+          "aftermath": "The request is approved after three weeks. The prototype sits idle, but nothing is exposed."
+        }
       ],
       "hints": {
-        "seer": ["A silver fish leaps against the current and lands, twice, in the very same shallow place."],
-        "scout": ["The main channel runs fast and deep. Further along, a line of pale stones breaks the surface in a neat row."],
-        "scholar": ["Old songs of Hollowmere speak of three sentinels that guard the crossing of the Mere."],
-        "empath": ["Your horses stand calm when they face the standing stones and flinch when they face the open water."]
+        "seer": [
+          "A security review is scheduled for next month. Anything built on borrowed access will surface in it."
+        ],
+        "scout": [
+          "Nobody has audited the old account in two years. A read-only feed could be switched on within a day of agreement."
+        ],
+        "scholar": [
+          "The data-handling policy allows read-only sharing for analysis once the data owner has signed off."
+        ],
+        "empath": [
+          "The test operations lead has been burned before. She softens when treated as a partner rather than a gate to get around."
+        ]
       }
     },
     "d3": {
-      "id": "d3", "title": "The Gravel Inn", "chapter": 0, "band": "c1",
-      "scene": "Night falls at the Gravel Inn, a squat building older than the road it stands on. The innkeeper offers rooms and a hot meal, but he keeps glancing at the cellar door.",
+      "id": "d3",
+      "title": "The Team Question",
+      "chapter": 0,
+      "band": "c1",
+      "scene": "The prototype works, but it needs one more builder before it can go further. Three people come to mind, and each would change what Bridgeline becomes.",
       "options": [
-        { "id": "a", "label": "Take separate rooms and bar the doors", "type": "mixed", "to": "@ch1", "aftermath": "The doors hold, but something scratches at three of them before dawn and nobody sleeps." },
-        { "id": "b", "label": "Camp outside the walls", "type": "weak", "to": "@ch1", "aftermath": "Wolves circle your fire and a strange cold keeps you awake. You leave before light, worn thin." },
-        { "id": "c", "label": "Share the common room and keep watch in shifts", "type": "strong", "to": "@ch1", "aftermath": "The hearth burns steady all night. Something walks the cellar, but it never climbs the stairs." }
+        {
+          "id": "a",
+          "label": "Recruit the brilliant engineer who prefers to work alone",
+          "type": "mixed",
+          "to": "@ch1",
+          "aftermath": "The code arrives fast and brilliant. Nobody else can read it."
+        },
+        {
+          "id": "b",
+          "label": "Ask the manager to assign whoever is free",
+          "type": "weak",
+          "to": "@ch1",
+          "aftermath": "A willing but unconvinced colleague joins. Enthusiasm stays low."
+        },
+        {
+          "id": "c",
+          "label": "Invite a sceptical quality engineer to try to break it",
+          "type": "strong",
+          "to": "@ch1",
+          "aftermath": "She finds four faults in a day. Then she starts fixing them."
+        }
       ],
       "hints": {
-        "seer": ["A lone candle gutters in every room, but the hearth fire of the common room burns steady and tall."],
-        "scout": ["Wolf sign circles the yard, fresh. The stable roof is sound and the walls are thick."],
-        "scholar": ["Inns on this road were raised over barrow-graves. The dead are said to walk only for those who sleep alone."],
-        "empath": ["The innkeeper fears his cellar, not strangers. He wants company in the house tonight."]
+        "seer": [
+          "Programmes that survive leadership reviews are the ones that have already answered their sceptics."
+        ],
+        "scout": [
+          "The lone engineer’s code is quick but undocumented. The quality engineer’s last review caught three failure cases in a rival tool."
+        ],
+        "scholar": [
+          "Review minutes show approvals are blocked more often by missing assurance than by missing features."
+        ],
+        "empath": [
+          "The loner cares about the work but not about being coached. The sceptic is quietly curious and has never been asked."
+        ]
       }
     },
     "m4": {
-      "id": "m4", "title": "The Thornwood Gate", "chapter": 1, "band": "d45",
-      "scene": "The Thornwood closes around the road like a fist. A hedge-witch steps from the brambles and offers to carry the Emberstone through the wood in exchange for one small favour. Behind her a narrow smugglers' trail winds away into the dark, while the old forest track runs straight on.",
+      "id": "m4",
+      "title": "Pilot Day",
+      "chapter": 1,
+      "band": "d45",
+      "scene": "The pilot at one test cell goes well. Two other sites are asking for access, and a conference organiser has noticed your name. Everyone wants Bridgeline now, and each choice sets a different pace.",
       "options": [
-        { "id": "a", "label": "Slip away down the smugglers' trail", "type": "detour", "to": "dr_b", "aftermath": "You leave the witch's cackle behind and follow muddy boot-prints south." },
-        { "id": "b", "label": "Accept the hedge-witch's offer to carry the Emberstone", "type": "doom", "to": "end_alt2", "aftermath": "" },
-        { "id": "c", "label": "Refuse the witch and hold to the old forest track", "type": "true", "to": "m5", "aftermath": "The witch spits a curse that fizzles on the iron at your belts. The brambles part grudgingly, and the track holds." }
+        {
+          "id": "a",
+          "label": "Take the pilot on tour at an industry conference",
+          "type": "detour",
+          "to": "dr_b",
+          "aftermath": "A conference badge, a stage slot and a stack of business cards. Back at the centre, the backlog grows."
+        },
+        {
+          "id": "b",
+          "label": "Open Bridgeline to every site by Friday",
+          "type": "doom",
+          "to": "end_alt2",
+          "aftermath": "Friday arrives. So do two hundred users and a problem nobody tested."
+        },
+        {
+          "id": "c",
+          "label": "Add one more site and fix what the pilot revealed",
+          "type": "true",
+          "to": "m5",
+          "aftermath": "The second site finds a slow search and a coarse permissions rule. You fix both before anyone else sees them."
+        }
       ],
       "hints": {
-        "seer": ["A crown of ash hangs above the witch's head, though she wears no crown at all."],
-        "scout": ["The smugglers' trail is well trodden by recent boots, but it bends steadily south, away from the Altar."],
-        "scholar": ["The witches of the Thornwood never ask for a small favour. Their favours are always a name, a crown, or a flame."],
-        "empath": ["Everything the witch says is true, and what she leaves unsaid is worse. The forest itself feels watchful, not hostile."]
+        "seer": [
+          "A wide launch before the platform is hardened would draw attention for the wrong reasons. A smaller step compounds quietly."
+        ],
+        "scout": [
+          "The pilot exposed slow search beyond one site and permissions that are too coarse. A single extra site would reveal the rest safely."
+        ],
+        "scholar": [
+          "Presenting unreleased internal tools outside the company needs legal and export review first, and that takes time."
+        ],
+        "empath": [
+          "Every site lead is excited, and that is the danger: each wants to be first. The one who offered to host a trial will give honest feedback."
+        ]
       }
     },
     "m5": {
-      "id": "m5", "title": "The Wardstone Bridge", "chapter": 1, "band": "d45",
-      "scene": "Deep in the Thornwood, an ancient stone bridge spans a gorge. A black-cloaked toll-keeper blocks the way and holds out a pale hand for payment. Beside the bridge a goat track climbs the cliff, and a rune glows faintly on the bridge's keystone.",
+      "id": "m5",
+      "title": "The Data Boundary",
+      "chapter": 1,
+      "band": "d45",
+      "scene": "Bridgeline now surfaces engine-health insights that customers would love to see. The airline customer’s operations team has asked for direct access, and your account manager is eager to please.",
       "options": [
-        { "id": "a", "label": "Let the toll-keeper hold the Emberstone as payment", "type": "doom", "to": "end_alt2", "aftermath": "" },
-        { "id": "b", "label": "Climb the goat track around the bridge", "type": "detour", "to": "dr_c", "aftermath": "The goat track is steep and cruel, but the toll-keeper's hiss fades behind you." },
-        { "id": "c", "label": "Cross the stone bridge and speak the founders' words", "type": "true", "to": "m6", "aftermath": "The old words roll out of you, the keystone blazes, and the toll-keeper's cloak sags empty onto the stones. The bridge is yours." }
+        {
+          "id": "a",
+          "label": "Give the airline customer a login today",
+          "type": "doom",
+          "to": "end_alt2",
+          "aftermath": "The airline logs in, and sees more than the contract ever allowed."
+        },
+        {
+          "id": "b",
+          "label": "Build a separate customer portal first",
+          "type": "detour",
+          "to": "dr_c",
+          "aftermath": "A promising idea and a long road. Word spreads, and a start-up calls."
+        },
+        {
+          "id": "c",
+          "label": "Share curated summaries through the existing customer channel",
+          "type": "true",
+          "to": "m6",
+          "aftermath": "The airline gets clear, trusted updates and asks for more. Nothing proprietary leaves the building."
+        }
       ],
       "hints": {
-        "seer": ["The toll-keeper's cloak holds no body. His hands are the colour of cold ash."],
-        "scout": ["The goat track climbs to a ledge nobody has walked in years, and it leads away from the pass."],
-        "scholar": ["The Wardstone Bridge bears a blessing: its guardian must yield to anyone who speaks the founders' words, 'Aldoria endures'."],
-        "empath": ["The toll-keeper wants the Emberstone more than anything, and it is the one thing he cannot take by force."]
+        "seer": [
+          "Customers want to feel informed. A trusted channel earns more goodwill than raw access ever does."
+        ],
+        "scout": [
+          "Design margins sit in the same tables as the health data. Summaries can be generated from the current feed within the week."
+        ],
+        "scholar": [
+          "Contract terms and export rules restrict direct access to engineering data. Curated summaries are already an approved route."
+        ],
+        "empath": [
+          "The airline wants reassurance, not raw data. A regular briefing from someone they trust would satisfy them."
+        ]
       }
     },
     "dr_a": {
-      "id": "dr_a", "title": "Lost in the Mirewood", "chapter": 1, "band": "drift",
-      "scene": "A grey mist swallows the road and every landmark. Your tired party has wandered to the edge of the Mirewood. Pale lights bob between the trees, the reeds grow thick to the east, and somewhere far off a bell tolls slowly.",
+      "id": "dr_a",
+      "title": "The Borrowed Sponsor",
+      "chapter": 1,
+      "band": "drift",
+      "scene": "Your early choices left Bridgeline with a modest reputation. A senior sponsor from procurement offers budget, but she wants the platform reshaped around supplier cost savings. The offer is generous, and it has strings.",
       "options": [
-        { "id": "a", "label": "Follow the bobbing lights between the trees", "type": "wrong", "to": "end_alt3", "aftermath": "" },
-        { "id": "b", "label": "Cut straight east through the reeds", "type": "wrong", "to": "end_alt3", "aftermath": "" },
-        { "id": "c", "label": "Follow the tolling bell", "type": "right", "to": "m5", "aftermath": "The bell leads you to a hermit's chapel and from there back to the road, a day behind but whole." }
+        {
+          "id": "a",
+          "label": "Accept the budget and reshape Bridgeline around cost savings",
+          "type": "wrong",
+          "to": "end_alt3",
+          "aftermath": "The money arrives. The engineers’ priorities quietly leave the roadmap."
+        },
+        {
+          "id": "b",
+          "label": "Decline the money and carry on alone",
+          "type": "wrong",
+          "to": "end_alt3",
+          "aftermath": "You keep your independence, and very little else."
+        },
+        {
+          "id": "c",
+          "label": "Accept support only with shared goals agreed in writing",
+          "type": "right",
+          "to": "m5",
+          "aftermath": "A one-page charter is signed. The sponsor gets her savings metric, and engineering keeps its safety scope."
+        }
       ],
       "hints": {
-        "seer": ["The lights ahead are cold and green. The bell's sound is warm and amber."],
-        "scout": ["The eastern bog is treacherous, and the lights drift in the same loop again and again, like a lure on a line."],
-        "scholar": ["Will-o'-the-wisps lead travellers into pools. Chapel bells were hung in the Mirewood to guide pilgrims home."],
-        "empath": ["Something in the lights is hungry, patient and pleased. The bell feels like a sorrow that wants you safe."]
+        "seer": [
+          "Sponsors with a single goal pull a product toward it. A written scope keeps the pull in check."
+        ],
+        "scout": [
+          "The supplier module is half-built. Reshaping around it would delay the engineering features by months."
+        ],
+        "scholar": [
+          "Programmes with a signed charter have outlasted changes of sponsor in this company’s history."
+        ],
+        "empath": [
+          "She wants a win, but she respects people who negotiate. What she dislikes most is surprises."
+        ]
       }
     },
     "dr_b": {
-      "id": "dr_b", "title": "The Smugglers' Cellar", "chapter": 1, "band": "drift",
-      "scene": "The smugglers' trail ends at a hidden cellar beneath a ruined mill. A scarred captain offers passage through the old tunnels for a price, while eight of her crew watch your packs with great interest.",
+      "id": "dr_b",
+      "title": "The Conference Corridor",
+      "chapter": 1,
+      "band": "drift",
+      "scene": "Between sessions at the aerospace conference, a leader from another business unit asks to see Bridgeline. Nearby, a recruiter from a rival firm offers coffee and says he has heard good things.",
       "options": [
-        { "id": "a", "label": "Show the Emberstone to prove your worth", "type": "wrong", "to": "end_alt3", "aftermath": "" },
-        { "id": "b", "label": "Pay the captain in coin and keep the Emberstone hidden", "type": "right", "to": "m6", "aftermath": "The captain bites the coin, grins, and guides you through the tunnels. You surface at the edge of the Thornwood." },
-        { "id": "c", "label": "Refuse and fight your way through her crew", "type": "wrong", "to": "end_alt3", "aftermath": "" }
+        {
+          "id": "a",
+          "label": "Show everything live, including real customer data",
+          "type": "wrong",
+          "to": "end_alt3",
+          "aftermath": "The demo dazzles, until someone reads the customer names on the screen."
+        },
+        {
+          "id": "b",
+          "label": "Demonstrate with synthetic data and arrange a follow-up",
+          "type": "right",
+          "to": "m6",
+          "aftermath": "The leader leaves impressed, with a meeting booked. Nothing real was shown."
+        },
+        {
+          "id": "c",
+          "label": "Skip the demo and accept the recruiter’s coffee invitation",
+          "type": "wrong",
+          "to": "end_alt3",
+          "aftermath": "The coffee is pleasant. The leader from the other unit walks away."
+        }
       ],
       "hints": {
-        "seer": ["Every smuggler's eye in the cellar is fixed on one thing: any glow that might spill from your packs."],
-        "scout": ["Eight armed smugglers, three of them on the stairs. You cannot win a fight in this cellar."],
-        "scholar": ["Smuggler codes forbid cheating anyone who pays the toll. Coin buys their word, but glitter buys their knives."],
-        "empath": ["The captain is weary of the war and wants the winter ended. She is not your enemy unless you give her cause."]
+        "seer": [
+          "The leader’s unit could become Bridgeline’s biggest user. A strong first impression travels further than the person who made it."
+        ],
+        "scout": [
+          "The live demo system is connected to real customer data by default. A synthetic data set is already on the laptop."
+        ],
+        "scholar": [
+          "Rules on external disclosure allow synthetic demonstrations without special approval."
+        ],
+        "empath": [
+          "The recruiter is friendly, but his interest is in people, not in Bridgeline. The leader is genuinely curious."
+        ]
       }
     },
     "dr_c": {
-      "id": "dr_c", "title": "The Hermit's Ledge", "chapter": 1, "band": "drift",
-      "scene": "The goat track ends at a narrow ledge before a hermit's cave. Storm clouds boil over the pass, and a long slope of loose scree hangs between you and the road beyond. The hermit leans on a staff in the cave mouth and watches the sky.",
+      "id": "dr_c",
+      "title": "The Start-up’s Offer",
+      "chapter": 1,
+      "band": "drift",
+      "scene": "A young analytics start-up has heard about Bridgeline and offers to run its analytics as a service, quickly and cheaply. The founders are sharp and in a hurry. Your team could use the speed.",
       "options": [
-        { "id": "a", "label": "Cross the scree slope before the storm arrives", "type": "wrong", "to": "end_alt3", "aftermath": "" },
-        { "id": "b", "label": "Climb back down the cliff and rejoin the road", "type": "wrong", "to": "end_alt3", "aftermath": "" },
-        { "id": "c", "label": "Shelter in the hermit's cave until the storm breaks", "type": "right", "to": "m7", "aftermath": "The storm howls all afternoon and is gone by midnight. At dawn the hermit guides you across the cleared pass to the ice bridge." }
+        {
+          "id": "a",
+          "label": "Send them a copy of the data so they can start next week",
+          "type": "wrong",
+          "to": "end_alt3",
+          "aftermath": "They start on Monday. So does a conversation with the security team."
+        },
+        {
+          "id": "b",
+          "label": "Turn the offer down and never reply",
+          "type": "wrong",
+          "to": "end_alt3",
+          "aftermath": "The silence is noted, and so is the opportunity you let pass."
+        },
+        {
+          "id": "c",
+          "label": "Learn what they do well and bring it in through the supplier process",
+          "type": "right",
+          "to": "m7",
+          "aftermath": "The start-up passes the supplier checks slowly, but it does pass. Bridgeline gains a faster engine."
+        }
       ],
       "hints": {
-        "seer": ["Clouds boil over the pass. The storm will break before sundown and be gone by midnight."],
-        "scout": ["The scree slope is loose, and a single footfall now would bring it down. The cliff below has no holds at all."],
-        "scholar": ["The hermit is Brother Aldric, who once tended the Founder's flame and still keeps a chart of every path through the pass."],
-        "empath": ["The hermit is lonely, not dangerous. The cave feels like the safest place on the mountain."]
+        "seer": [
+          "Start-ups with sharp ideas tend to be acquired or to vanish. Whatever you rely on should survive either."
+        ],
+        "scout": [
+          "Their prototype is faster than yours on the same sample, but it has never been tested at scale."
+        ],
+        "scholar": [
+          "Procurement rules require checks for any outside party that handles company data. They exist for good reason and can be completed in weeks."
+        ],
+        "empath": [
+          "The founders want a first big customer more than a quick payout. They will wait if they are treated seriously."
+        ]
       }
     },
     "m6": {
-      "id": "m6", "title": "The Greycloak Camp", "chapter": 1, "band": "d68",
-      "scene": "A river of fog marks the edge of the Thornwood. Beyond it lies the Frostbound Pass, and between you and the pass a company of royal Greycloaks has made camp, sworn to seize any magic that crosses the border. Their captain stands at the head of the track with her spear grounded.",
+      "id": "m6",
+      "title": "The Credit Question",
+      "chapter": 1,
+      "band": "d68",
+      "scene": "The Leadership Review deck is due tonight. It lists you and your sponsor. The early engineer who built Bridgeline’s search layer is not mentioned anywhere, and she has not asked to be.",
       "options": [
-        { "id": "a", "label": "Charge through the camp under cover of fog", "type": "rash", "to": "end_alt4", "aftermath": "" },
-        { "id": "b", "label": "Parley with the captain and tell her the truth", "type": "right", "to": "m7", "aftermath": "The captain listens to the end, lowers her spear, and gives you rations and a safe path to the pass." },
-        { "id": "c", "label": "Wait in the trees for the Greycloaks to move on", "type": "timid", "to": "end_alt5", "aftermath": "" }
+        {
+          "id": "a",
+          "label": "Put your own name on the key slide and send it tonight",
+          "type": "rash",
+          "to": "end_alt4",
+          "aftermath": "The deck goes out on time. The early engineer reads it on her phone and says nothing."
+        },
+        {
+          "id": "b",
+          "label": "Name every builder and invite her to present her part",
+          "type": "right",
+          "to": "m7",
+          "aftermath": "She goes quiet, then nods. The slide now carries five names."
+        },
+        {
+          "id": "c",
+          "label": "Leave the question of credit until after the review",
+          "type": "timid",
+          "to": "end_alt5",
+          "aftermath": "Everyone is relieved to avoid an awkward conversation. For now."
+        }
       ],
       "hints": {
-        "seer": ["The captain's banner droops although the wind is strong. Her soldiers are weary, not cruel."],
-        "scout": ["Forty tired soldiers, spears low but alert. They have been camped for weeks, and there is no sign of them leaving."],
-        "scholar": ["The Greycloaks swore an oath to the Founder's line. Honesty about the Flame binds them more than gold or steel."],
-        "empath": ["The captain wants the Flame relit as badly as you do. What she fears is being tricked."]
+        "seer": [
+          "People leave quietly after being overlooked. Much of the platform’s best thinking lives in one person’s head."
+        ],
+        "scout": [
+          "The search layer has no documentation. Its builder is the only person who can explain it to the reviewers."
+        ],
+        "scholar": [
+          "Company recognition guidelines expect every material contributor to be acknowledged in programme reviews."
+        ],
+        "empath": [
+          "She has not asked for credit, which is exactly why it matters. She would rather speak for her work than be thanked afterwards."
+        ]
       }
     },
     "m7": {
-      "id": "m7", "title": "The Ice Bridge", "chapter": 2, "band": "d68",
-      "scene": "A bridge of ancient ice spans the gorge of the Frostbound Pass, glittering and groaning. The sun is climbing, and every hour thins the ice. A web of cracks runs across its centre.",
+      "id": "m7",
+      "title": "The Incident Alert",
+      "chapter": 2,
+      "band": "d68",
+      "scene": "Three weeks before the review, a permissions bug lets one site’s maintenance notes appear to users at another site for several minutes. So far, nobody has noticed except you.",
       "options": [
-        { "id": "a", "label": "Wait for nightfall so the ice can thicken", "type": "timid", "to": "end_alt5", "aftermath": "" },
-        { "id": "b", "label": "Gallop across at full speed", "type": "rash", "to": "end_alt4", "aftermath": "" },
-        { "id": "c", "label": "Cross one at a time, spread well apart, now", "type": "right", "to": "m8", "aftermath": "The bridge sings and shivers, but every careful step holds. You reach the far side as the first drip falls." }
+        {
+          "id": "a",
+          "label": "Patch it quietly and tell nobody",
+          "type": "timid",
+          "to": "end_alt5",
+          "aftermath": "The patch holds. The secret does not."
+        },
+        {
+          "id": "b",
+          "label": "Shut Bridgeline down at every site and announce it to the whole company",
+          "type": "rash",
+          "to": "end_alt4",
+          "aftermath": "The announcement is dramatic, and travels faster than the facts."
+        },
+        {
+          "id": "c",
+          "label": "Fix it, report it formally and tell the affected sites plainly",
+          "type": "right",
+          "to": "m8",
+          "aftermath": "The report is short and honest. Two site leaders thank you for telling them first."
+        }
       ],
       "hints": {
-        "seer": ["The bridge hums low as the sun climbs, and higher after noon. It will not last the day."],
-        "scout": ["Cracks web the centre. Weight spread thinly keeps the ice whole, while speed would shatter it."],
-        "scholar": ["Ice bridges of the pass bear steady loads and break under sudden blows. All of them melt after noon."],
-        "empath": ["Your companions are strained and afraid. The ice answers to a steady, unhurried calm."]
+        "seer": [
+          "Hidden problems resurface later and larger. Early honesty buys trust that nothing else can."
+        ],
+        "scout": [
+          "The fault was a single permissions rule. It affected notes only, no engine data, and the fix is small."
+        ],
+        "scholar": [
+          "The incident procedure requires reporting within a day and provides a short standard template."
+        ],
+        "empath": [
+          "The affected sites are not upset about the bug. They would be upset about silence."
+        ]
       }
     },
     "m8": {
-      "id": "m8", "title": "Redwatch Keep", "chapter": 2, "band": "d68",
-      "scene": "Frost-wraiths howl around Redwatch Keep, a half-ruined fortress that guards the road to the Altar. Its captain begs you to light a beacon on the tower to rally the realm, but the Emberstone's light would draw every wraith to you. A secret postern lies beneath the north wall.",
+      "id": "m8",
+      "title": "The Rival Platform",
+      "chapter": 2,
+      "band": "d68",
+      "scene": "Another team has built Nexus, a platform with a livelier look and a handful of features Bridgeline lacks. Leadership has noticed, and the Review will compare the two. Your people are anxious.",
       "options": [
-        { "id": "a", "label": "Shelter inside the keep and wait out the siege", "type": "timid", "to": "end_alt5", "aftermath": "" },
-        { "id": "b", "label": "Light the Emberstone on the tower to rally the keep", "type": "rash", "to": "end_alt4", "aftermath": "" },
-        { "id": "c", "label": "Slip out the postern and promise the keep a beacon from the Altar", "type": "right", "to": "m9", "aftermath": "The captain presses her signet into your hand. 'Light it,' she whispers, 'and we will answer.' You vanish into the snow." }
+        {
+          "id": "a",
+          "label": "Quietly withdraw and let Nexus take the stage",
+          "type": "timid",
+          "to": "end_alt5",
+          "aftermath": "The room is calm. So is the end of Bridgeline."
+        },
+        {
+          "id": "b",
+          "label": "Point out Nexus’s weaknesses in front of the Review",
+          "type": "rash",
+          "to": "end_alt4",
+          "aftermath": "The criticism is accurate and badly timed. The room turns cold."
+        },
+        {
+          "id": "c",
+          "label": "Propose combining the best of both with shared ownership",
+          "type": "right",
+          "to": "m9",
+          "aftermath": "The rival lead is wary, then relieved. A joint plan takes shape over two long evenings."
+        }
       ],
       "hints": {
-        "seer": ["Frost-wraiths drift toward any flame that burns openly. The keep's own fires are shuttered."],
-        "scout": ["The postern is unguarded. The wraiths circle the front gate and the western wall."],
-        "scholar": ["The Redwatch beacon was built to answer the Altar's flame, never to replace it. Lighting it early only wakes the dead."],
-        "empath": ["The captain's courage is thin. She needs a promise more than a miracle, and hiding inside would only shake her further."]
+        "seer": [
+          "Leaders rarely back one of two overlapping tools. They remember whoever made the problem smaller."
+        ],
+        "scout": [
+          "Nexus has a better interface but weak search and no assurance record. Bridgeline is the reverse."
+        ],
+        "scholar": [
+          "Past programme reviews have rewarded integrated proposals over competing ones."
+        ],
+        "empath": [
+          "The Nexus team is as nervous as yours. Their lead has been looking for a way to talk."
+        ]
       }
     },
     "m9": {
-      "id": "m9", "title": "The Sunken Library", "chapter": 2, "band": "d910",
-      "scene": "Beyond the keep lies the Sunken Library, half-drowned beneath meltwater. A choir of drowned scholars murmurs from the stacks. Three ways lead out: a stair of tide-stained marble, a bridge of floating books, and a spiral that descends into the flooded vault.",
+      "id": "m9",
+      "title": "The Rehearsal",
+      "chapter": 2,
+      "band": "d910",
+      "scene": "A trusted mentor listens to a full rehearsal of your Review presentation. He is blunt: you have too much good material. You can lead with one of two strong stories, or try to use it all.",
       "options": [
-        { "id": "a", "label": "Descend the spiral into the flooded vault", "type": "wrong", "to": "end_alt6", "aftermath": "" },
-        { "id": "b", "label": "Climb the tide-stained marble stair", "type": "right", "to": "m10", "aftermath": "Marble steps lead up, dry and quiet, onto the library roof under a darkening sky." },
-        { "id": "c", "label": "Cross the bridge of floating books", "type": "right", "to": "m10", "aftermath": "Pages shift under your boots, but the bridge bears you and a dry roof receives you on the far side." }
+        {
+          "id": "a",
+          "label": "Walk through every feature across sixty slides",
+          "type": "wrong",
+          "to": "end_alt6",
+          "aftermath": "The rehearsal runs forty minutes over. The mentor stops taking notes."
+        },
+        {
+          "id": "b",
+          "label": "Open with the hours engineers have won back, in their own words",
+          "type": "right",
+          "to": "m10",
+          "aftermath": "A short film of three engineers lands harder than any chart."
+        },
+        {
+          "id": "c",
+          "label": "Open with the assurance record and the incident report",
+          "type": "right",
+          "to": "m10",
+          "aftermath": "The mentor leans forward when you show the incident report you filed yourselves."
+        }
       ],
       "hints": {
-        "seer": ["Beneath the water something pale and patient watches the spiral. The stair and the book-bridge are quiet."],
-        "scout": ["The marble stair and the book-bridge both exit onto the library roof. The spiral drops below the waterline."],
-        "scholar": ["The drowned scholars guard the vault. Those who descend answer questions until their breath runs out."],
-        "empath": ["The choir above wants you gone, not harmed. The voices below beckon with a longing that is far too sweet."]
+        "seer": [
+          "The board remembers one clear story and one clear safety answer. Long lists fade quickly."
+        ],
+        "scout": [
+          "The time-saved data is strong, from three sites, with real quotes available. The assurance record is unusually clean for a first release."
+        ],
+        "scholar": [
+          "Review guidance suggests a ten-minute opening and an open conversation, not a full tour of the product."
+        ],
+        "empath": [
+          "The mentor winces at long decks. The board is split between people-minded and evidence-minded members, and both will be in the room."
+        ]
       }
     },
     "m10": {
-      "id": "m10", "title": "The Altar of Aldoria", "chapter": 3, "band": "d910",
-      "scene": "At last the Altar rises from the snow, a ring of black stones around a cold basin. The Ashen Eclipse begins to eat the sun. The Emberstone pulses in the Warden's hands, ready. The altar stone is scarred with an old crack, and the basin is rimed with frost.",
+      "id": "m10",
+      "title": "The Leadership Review",
+      "chapter": 3,
+      "band": "d910",
+      "scene": "The room is full, the screen is bright, and your presentation lands well. Then the Chair asks the question you hoped to avoid: who owns Bridgeline when the pilot team moves on, and what happens at a site that does not want it?",
       "options": [
-        { "id": "a", "label": "Strike the Emberstone against the altar to spark the flame", "type": "wrong", "to": "end_alt6", "aftermath": "" },
-        { "id": "b", "label": "Set the Emberstone in the basin and speak the founders' words", "type": "right", "to": "end_true", "aftermath": "" },
-        { "id": "c", "label": "Each of you lays a hand on the basin as the Warden sets the Emberstone", "type": "right", "to": "end_true", "aftermath": "" }
+        {
+          "id": "a",
+          "label": "Say it is a pilot project and ownership can be decided later",
+          "type": "wrong",
+          "to": "end_alt6",
+          "aftermath": "The Chair writes something down. It is not a note of approval."
+        },
+        {
+          "id": "b",
+          "label": "Propose a named cross-site owner and an opt-in rollout with clear measures",
+          "type": "right",
+          "to": "end_true",
+          "aftermath": "The Chair nods slowly. Somebody at the back starts to smile."
+        },
+        {
+          "id": "c",
+          "label": "Offer a handover plan with a small standing team and quarterly assurance checks",
+          "type": "right",
+          "to": "end_true",
+          "aftermath": "The Chair asks only one follow-up, and it is about the start date."
+        }
       ],
       "hints": {
-        "seer": ["The basin remembers hands. Wherever a hand touches it, the frost recedes."],
-        "scout": ["The altar stone is cracked from an old blow. Scorch marks show that someone once struck it, long ago, and failed."],
-        "scholar": ["The Founder did not strike the flame into being. The first kindling was a gift laid down and a vow spoken."],
-        "empath": ["Your companions are all afraid and all willing. The stone hums softly wherever a vow is spoken."]
+        "seer": [
+          "Leaders approve what they believe will still be cared for in a year. Vagueness reads as risk.",
+          "Every approval in the last two years went to a proposal that named an owner. None went to an open question."
+        ],
+        "scout": [
+          "A small standing team can be funded from existing budgets. Two sites have already volunteered to be the first opt-in sites.",
+          "The numbers work for a small permanent team, and two sites are ready to go first by choice."
+        ],
+        "scholar": [
+          "Governance guidance expects a named owner, a handover plan and regular reviews for any shared platform.",
+          "Shared platforms here need an owner, a plan for passing it on, and checkpoints. The guidance is explicit."
+        ],
+        "empath": [
+          "The Chair is not hostile. She wants to be able to say yes, and is looking for something to hold onto.",
+          "She asked the question because she wants to approve. Give her an answer she can defend."
+        ]
       }
     }
   },
   "endings": {
     "end_alt1": {
-      "id": "end_alt1", "title": "The Road Ends at the Ford", "kind": "alt",
-      "text": "Weary and behind schedule, the party never finds its footing. The Emberstone dims on the road, and by the third night winter reaches the lowlands. Hollowmere is the first village to go quiet.",
-      "debrief": "Your first three choices left the party short of time and strength. The elder's map, the standing stones and the shared hearth were the strong picks."
+      "id": "end_alt1",
+      "title": "The Quiet Shelf",
+      "kind": "alt",
+      "text": "Bridgeline never finds its footing. The demos fade, the data goes stale, and the project folder slips down the shared drive. A year later, an engineer stumbles on it and wonders what might have been.",
+      "debrief": "The early choices decide whether people want a tool at all. Starting from users’ real pain, getting access properly and inviting honest challenge would have built the support Bridgeline needed."
     },
     "end_alt2": {
-      "id": "end_alt2", "title": "The Bargain", "kind": "alt",
-      "text": "You bartered with something that never gives, only takes. The Emberstone passes into hands that wear a crown of ash, and a flame will be kindled again one day, but for the wrong master.",
-      "debrief": "The Emberstone must never be given up as payment. The founders' words and a steady refusal were the way through."
+      "id": "end_alt2",
+      "title": "The Rollback",
+      "kind": "alt",
+      "text": "A rushed expansion exposes information that should never have left its team. Access is frozen within the hour and Bridgeline is switched off for review. The inquiry is fair, thorough and long.",
+      "debrief": "Pace is a decision, not a virtue. Growing one site at a time and sharing curated summaries instead of raw access would have protected the trust the platform depends on."
     },
     "end_alt3": {
-      "id": "end_alt3", "title": "Lost on the Detour", "kind": "alt",
-      "text": "The shortcut was a snare. Days slip by in mist and mire, the Eclipse arrives without you, and the Emberstone burns down to a cold, grey pebble.",
-      "debrief": "Detours leave little room for mistakes. When the path is unclear, listen to the clue that comes from a place of safety."
+      "id": "end_alt3",
+      "title": "The Side Project",
+      "kind": "alt",
+      "text": "Bridgeline survives, but only as a small tool serving one department. It is useful and tidy, and nothing like the company-wide network you imagined.",
+      "debrief": "Detours need a clear way back. Help works best when goals and limits are agreed in writing, and outside offers should come in through the proper door."
     },
     "end_alt4": {
-      "id": "end_alt4", "title": "Acted Too Soon", "kind": "alt",
-      "text": "You rushed in with courage and no plan. The Emberstone is knocked from the Warden's hands, and its light goes out in the snow while the Eclipse races on.",
-      "debrief": "Boldness without a plan cost you the quest. The right path asked for careful, honest steps."
+      "id": "end_alt4",
+      "title": "The Burnt Bridge",
+      "kind": "alt",
+      "text": "A hasty move costs you something that is hard to rebuild. Key colleagues drift away, and the platform loses the people who understood it best. The Review goes ahead without a strong case.",
+      "debrief": "Rash choices spend trust faster than it can be earned. Crediting colleagues, owning problems openly and working with rivals would have kept the team whole."
     },
     "end_alt5": {
-      "id": "end_alt5", "title": "The Long Wait", "kind": "alt",
-      "text": "You hesitated, and the hours slipped away. By the time the party agrees on a plan, the Ashen Eclipse has swallowed the sun and the pass is sealed in ice.",
-      "debrief": "Waiting felt safe, but the Eclipse does not wait. The right path asked for a steady step taken now."
+      "id": "end_alt5",
+      "title": "The Perfect Pilot",
+      "kind": "alt",
+      "text": "Careful to a fault, you keep Bridgeline small, quiet and safe. The Review praises the effort, and funds a rival instead. The pilot carries on, for a while.",
+      "debrief": "Caution is not the same as care. Staying silent, giving way to a rival and leaving credit unsettled all felt safe, and each of them cost trust or momentum."
     },
     "end_alt6": {
-      "id": "end_alt6", "title": "One Step Short", "kind": "alt",
-      "text": "So near the end, one wrong turn undid everything. The flame catches for a single bright breath, then gutters out, and the old winter closes over Aldoria.",
-      "debrief": "You were a single choice away from the Altar's fire. Reread the omens and the lore before the last steps."
+      "id": "end_alt6",
+      "title": "The Last Question",
+      "kind": "alt",
+      "text": "The Review ends politely. Leaders like Bridgeline, but without a focused story or a clear answer on ownership they ask you to come back next quarter. The momentum does not wait.",
+      "debrief": "The final stretch rewards focus and accountability. A clear opening story and a named owner turn goodwill into a decision."
     },
     "end_true": {
-      "id": "end_true", "title": "The Flame Rekindled", "kind": "true",
-      "text": "The Emberstone settles into the basin and the old words rise from your throats like a hymn. Gold light spills across the snow, the Eclipse recoils, and far across Aldoria beacons answer from tower to tower, Redwatch first. Winter loosens its grip. You have relit the Founder's Flame.",
-      "debrief": "You read the omens, trusted the lore and the people you met on the road, and kindled the flame as the Founder did: with a gift and a vow."
+      "id": "end_true",
+      "title": "Bridgeline Goes Live",
+      "kind": "true",
+      "text": "The Chair smiles. Bridgeline is approved for opt-in rollout across the India sites, with a named owner, a small standing team and quarterly assurance reviews. In the corridor, the early engineer, the sceptical quality lead and the rival team’s lead are already planning the first training session.",
+      "debrief": "You started with real users, earned trust through honesty, credited every builder and joined forces with a rival. Ownership and safety, shown openly, made the case."
     }
   }
 }

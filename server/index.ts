@@ -67,7 +67,7 @@ const hooks = {
   },
 };
 
-const GAME_EVENTS = new Set(['chat', 'suggest', 'choose', 'start', 'skip', 'bots']);
+const GAME_EVENTS = new Set(['say', 'publish', 'suggest', 'choose', 'start', 'skip', 'bots']);
 
 io.on('connection', (socket) => {
   let pid = '';
@@ -121,5 +121,5 @@ setInterval(() => {
 }, 60 * 1000).unref();
 
 server.listen(PORT, () => {
-  console.log(`The Last Ember of Aldoria: http://localhost:${PORT}  (decision timer ${opts.decisionSeconds}s)`);
+  console.log(`Project Bridgeline: http://localhost:${PORT}  (decision timer ${opts.decisionSeconds}s)`);
 });
